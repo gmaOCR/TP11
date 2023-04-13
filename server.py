@@ -24,19 +24,11 @@ clubs = loadClubs()
 def index():
     return render_template('index.html')
 
-""" @app.route('/showSummary',methods=['POST'])
-def showSummary():
-    club = [club for club in clubs if club['email'] == request.form['email']][0]
-    return render_template('welcome.html',club=club,competitions=competitions) """
-    # server.py
-
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
-    email = request.form['email']
-    club = next((club for club in clubs if club['email'] == email), None)
-    if club is None:
-        return "Club not found", 404
+    club = [club for club in clubs if club['email'] == request.form['email']][0]
     return render_template('welcome.html',club=club,competitions=competitions)
+
 
 
 @app.route('/book/<competition>/<club>')
@@ -58,6 +50,7 @@ def purchasePlaces():
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
+    
 
 
 # TODO: Add route for points display
