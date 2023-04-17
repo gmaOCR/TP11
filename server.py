@@ -67,13 +67,12 @@ def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
-    if placesRequired > 12: #ajout bug 3
-        return 'Cannot book more than 12 places per competition', 400 #ajout bug 3
+    if placesRequired > 12:
+        return 'Cannot book more than 12 places per competition', 400
     elif int(competition['numberOfPlaces']) < placesRequired:
-        return 'Not enough places available', 400 #ajout bug 2
+        return 'Not enough places available', 400 
     elif int(club['points']) < placesRequired:
-        return 'Not enough points available', 400 #ajout bug 2
-    #ajouts bug 3
+        return 'Not enough points available', 400 
     else:
         if competition['name'] in competition_bookings and competition_bookings[competition['name']] + placesRequired > 12:
             return 'Max 12 places per competition', 400
