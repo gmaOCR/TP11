@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from flask import Flask,render_template,request,redirect,flash,url_for
 
 
@@ -51,6 +52,8 @@ def purchasePlaces():
     flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)"""
 
+club_bookings = {}  
+competition_bookings = {}
 
 @app.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
