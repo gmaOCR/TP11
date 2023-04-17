@@ -42,14 +42,50 @@ def book(competition,club):
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
-@app.route('/purchasePlaces',methods=['POST'])
+"""@app.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     flash('Great-booking complete!')
+    return render_template('welcome.html', club=club, competitions=competitions)"""
+
+
+@app.route('/purchasePlaces',methods=['POST'])
+def purchasePlaces():
+    competition = [c for c in competitions if c['name'] == request.form['competition']][0]
+    club = [c for c in clubs if c['name'] == request.form['club']][0]
+    placesRequired = int(request.form['places'])
+    competition_date = datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S') #ajout bug 4
+    if competition_date < datetime.now(): #ajout bug 4
+        return 'Cannot book places for a past competition', 400 #ajout bug 4
+    if placesRequired > 12: #ajout bug 3
+        return 'Cannot book more than 12 places per competition', 400 #ajout bug 3
+    elif int(competition['numberOfPlaces']) < placesRequired:
+        return 'Not enough places available', 400 #ajout bug 2
+    elif int(club['points']) < placesRequired:
+        return 'Not enough points available', 400 #ajout bug 2
+    #ajouts bug 3
+    else:
+        if competition['name'] in competition_bookings and competition_bookings[competition['name']] + placesRequired > 12:
+            return 'Max 12 places per competition', 400
+        if club['name'] in club_bookings and club_bookings[club['name']] + placesRequired > 12:
+            return 'IMax 12 places per competition and per club', 400
+        if competition['name'] in competition_bookings:
+            competition_bookings[competition['name']] += placesRequired
+        else:
+            competition_bookings[competition['name']] = placesRequired
+        if club['name'] in club_bookings:
+            club_bookings[club['name']] += placesRequired
+        else:
+            club_bookings[club['name']] = placesRequired
+    # fin ajouts bug 3
+        competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
+        club['points'] = int(club['points'])-placesRequired
+        flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
+
     
 
 
