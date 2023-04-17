@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from flask import Flask,render_template,request,redirect,flash,url_for
 
 
@@ -26,9 +27,11 @@ def index():
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
-    club = [club for club in clubs if club['email'] == request.form['email']][0]
+    email = request.form['email']
+    club = next((club for club in clubs if club['email'] == email), None)
+    if club is None:
+        return "Club not found", 404
     return render_template('welcome.html',club=club,competitions=competitions)
-
 
 
 @app.route('/book/<competition>/<club>')
@@ -41,15 +44,41 @@ def book(competition,club):
         flash("Something went wrong-please try again")
         return render_template('welcome.html', club=club, competitions=competitions)
 
+club_bookings = {}  
+competition_bookings = {}
 
 @app.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
-    competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
-    flash('Great-booking complete!')
+    competition_date = datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S') 
+    if placesRequired > 12: 
+        return 'Cannot book more than 12 places per competition', 400 
+    elif int(competition['numberOfPlaces']) < placesRequired:
+        return 'Not enough places available', 400 
+    elif int(club['points']) < placesRequired:
+        return 'Not enough points available', 400 
+    if competition_date < datetime.now():
+        return 'Cannot book places for a past competition', 400 
+    else:
+        if competition['name'] in competition_bookings and competition_bookings[competition['name']] + placesRequired > 12:
+            return 'Max 12 places per competition', 400
+        if club['name'] in club_bookings and club_bookings[club['name']] + placesRequired > 12:
+            return 'IMax 12 places per competition and per club', 400
+        if competition['name'] in competition_bookings:
+            competition_bookings[competition['name']] += placesRequired
+        else:
+            competition_bookings[competition['name']] = placesRequired
+        if club['name'] in club_bookings:
+            club_bookings[club['name']] += placesRequired
+        else:
+            club_bookings[club['name']] = placesRequired
+        competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
+        club['points'] = int(club['points'])-placesRequired
+        flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
+
     
 
 
