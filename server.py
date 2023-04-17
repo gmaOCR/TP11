@@ -69,15 +69,14 @@ def purchasePlaces():
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
     competition_date = datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S') #ajout bug 4
-    if competition_date < datetime.now(): #ajout bug 4
-        return 'Cannot book places for a past competition', 400 #ajout bug 4
-    if placesRequired > 12: #ajout bug 3
-        return 'Cannot book more than 12 places per competition', 400 #ajout bug 3
+    if competition_date < datetime.now():
+        return 'Cannot book places for a past competition', 400
+    if placesRequired > 12: 
+        return 'Cannot book more than 12 places per competition', 400
     elif int(competition['numberOfPlaces']) < placesRequired:
-        return 'Not enough places available', 400 #ajout bug 2
+        return 'Not enough places available', 400
     elif int(club['points']) < placesRequired:
-        return 'Not enough points available', 400 #ajout bug 2
-    #ajouts bug 3
+        return 'Not enough points available', 400 
     else:
         if competition['name'] in competition_bookings and competition_bookings[competition['name']] + placesRequired > 12:
             return 'Max 12 places per competition', 400
@@ -91,7 +90,6 @@ def purchasePlaces():
             club_bookings[club['name']] += placesRequired
         else:
             club_bookings[club['name']] = placesRequired
-    # fin ajouts bug 3
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
         club['points'] = int(club['points'])-placesRequired
         flash('Great-booking complete!')
