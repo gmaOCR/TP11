@@ -72,7 +72,7 @@ def purchasePlaces():
     competition_date = datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S') 
     if placesRequired > 12: 
         return 'Cannot book more than 12 places per competition', 400 
-    elif int(competition['numberOfPlaces']) < placesRequired:
+    if int(competition['numberOfPlaces']) < placesRequired:
         return 'Not enough places available', 400 
     elif int(club['points']) < placesRequired:
         return 'Not enough points available', 400 
