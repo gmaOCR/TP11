@@ -47,6 +47,7 @@ def book(competition,club):
         flash("Something went wrong-please try again")
         return render_template('welcome.html', club=club, competitions=competitions)
 
+
 club_bookings = {}  
 competition_bookings = {}
 
@@ -58,13 +59,16 @@ def purchasePlaces():
     competition_date = datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S') 
     if placesRequired > MAX_PLACES:
         flash(f'Cannot book more than {MAX_PLACES} places per competition')
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club=club, competitions=competitions), 400
     elif int(competition['numberOfPlaces']) < placesRequired:
-        return 'Not enough places available', 400 
+        flash('Not enough places available')
+        return render_template('welcome.html', club=club, competitions=competitions), 400
     elif int(club['points']) < placesRequired:
-        return 'Not enough points available', 400 
+        flash('Not enough points available')
+        return render_template('welcome.html', club=club, competitions=competitions), 400
     if competition_date < datetime.now():
-        return 'Cannot book places for a past competition', 400 
+        flash('Cannot book places for a past competition')
+        return render_template('welcome.html', club=club, competitions=competitions), 400
     else:
         if competition['name'] in competition_bookings and competition_bookings[competition['name']] + placesRequired > 12:
             return f'Max {MAX_PLACES} places per competition', 400
@@ -83,6 +87,9 @@ def purchasePlaces():
         flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
 
+def render_welcome_and_error(message):
+    flash(message)
+    return render_template('welcome.html', club=club, competitions=competitions), 400
 
 @app.route('/displayPlaces')
 def displayPlaces():
