@@ -87,7 +87,6 @@ def purchasePlaces():
             club_bookings[club['name']] += placesRequired
         else:
             club_bookings[club['name']] = placesRequired
-    # fin ajouts bug 3
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
         club['points'] = int(club['points'])-placesRequired
         flash('Great-booking complete!')
