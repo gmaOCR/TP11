@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from flask import Flask,render_template,request,redirect,flash,url_for
+from flask import Flask,render_template,request,redirect,flash,url_for, make_response
 
 MAX_PLACES = 12
 
@@ -31,7 +31,8 @@ def showSummary():
     email = request.form['email']
     club = next((club for club in clubs if club['email'] == email), None)
     if club is None:
-        return "Club not found", 404
+        flash('Club not found')
+        return redirect(url_for('index'))
     return render_template('welcome.html',club=club,competitions=competitions)
 
 
@@ -55,8 +56,9 @@ def purchasePlaces():
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
     competition_date = datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S') 
-    if placesRequired > MAX_PLACES: 
-        return f'Cannot book more than {MAX_PLACES} places per competition', 400
+    if placesRequired > MAX_PLACES:
+        flash(f'Cannot book more than {MAX_PLACES} places per competition')
+        return render_template('welcome.html', club=club, competitions=competitions)
     elif int(competition['numberOfPlaces']) < placesRequired:
         return 'Not enough places available', 400 
     elif int(club['points']) < placesRequired:
