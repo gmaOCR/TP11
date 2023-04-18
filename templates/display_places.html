@@ -1,46 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Places by club and competition</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            text-align: left;
-            padding: 8px;
-            border: 1px solid black;
-        }
-        th {
-            background-color: #ddd;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <h1>Places by club and competition</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Club</th>
-                {% for competition in competitions %}
-                    <th>{{ competition.name }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for club in clubs %}
-                <tr>
-                    <td>{{ club.name }}</td>
-                    {% for competition in competitions %}
-                        <td>{{ places_by_club_and_competition[club.name][competition.name] }} ({{ club_bookings.get(club.name, {}).get(competition.name, 0) }})</td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+<h1>Points Display Board</h1>
+<div class="display-clubs">
+    <h2>Table of clubs</h2>
+    <ul>
+        {% for club in clubs %}
+            <li>Club: {{ club.name }} - {{ club.points }} points</li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="display-competitions">
+    <h2>Table of competitions</h2>
+    <ul>
+        {% for competition in competitions %}
+            <li>
+                {% if competition.is_date_not_yet_passed %}
+                    <u><b>Future Event</b></u>
+                {% else %}
+                    <u>Event Ended</u>
+                {% endif %} :
+                {{ competition.name }}<br>
+                Date: {{ competition.date }} <br>
+                Places available: {{ competition.numberOfPlaces }}.
+            </li>
+        {% endfor %}
+    </ul>
+</div>

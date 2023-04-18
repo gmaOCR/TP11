@@ -14,6 +14,7 @@ def loadCompetitions():
     with open('competitions.json') as comps:
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
+     
 
 
 app = Flask(__name__)
@@ -22,9 +23,14 @@ app.secret_key = 'something_special'
 competitions = loadCompetitions()
 clubs = loadClubs()
 
+club_bookings = {}  
+competition_bookings = {}
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html',
+                            clubs=clubs,
+                           competitions=competitions)
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
@@ -38,7 +44,7 @@ def showSummary():
 
 
 @app.route('/book/<competition>/<club>')
-def book(competition,club):
+def book(competition, club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
     if foundClub and foundCompetition:
@@ -48,34 +54,44 @@ def book(competition,club):
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
-club_bookings = {}  
-competition_bookings = {}
-
 @app.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
     competition_date = datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S') 
+    
+    # Check if the purchase is over the MAX_PLACES set
     if placesRequired > MAX_PLACES:
         flash(f'Cannot book more than {MAX_PLACES} places per competition')
         return render_template('welcome.html', club=club, competitions=competitions), 400
+    
+    # Check if the competition still have enough places avalaible 
     elif int(competition['numberOfPlaces']) < placesRequired:
         flash('Not enough places available')
         return render_template('welcome.html', club=club, competitions=competitions), 400
+    
+    # Check if the club have enough points to purchase
     elif int(club['points']) < placesRequired:
         flash('Not enough points available')
         return render_template('welcome.html', club=club, competitions=competitions), 400
+    
+    # Check if the competetion is outdated
     if competition_date < datetime.now():
         flash('Cannot book places for a past competition')
         return render_template('welcome.html', club=club, competitions=competitions), 400
+
     else:
+        
+        # Check if the amount of places purchased by the same club on the same competition is over MAX_PLACES set 
         if competition['name'] in competition_bookings and competition_bookings[competition['name']] + placesRequired > 12:
-            return f'Max {MAX_PLACES} places per competition', 400
-        if club['name'] in club_bookings and club_bookings[club['name']] + placesRequired > 12:
-            return f'IMax {MAX_PLACES} places per competition and per club', 400
+            flash(f'Max {MAX_PLACES} places per competition')
+            return render_template('welcome.html', club=club, competitions=competitions), 400
         if competition['name'] in competition_bookings:
             competition_bookings[competition['name']] += placesRequired
+            
+            
+         # In all ohter cases -> do the purchase  
         else:
             competition_bookings[competition['name']] = placesRequired
         if club['name'] in club_bookings:
@@ -87,30 +103,11 @@ def purchasePlaces():
         flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
 
-def render_welcome_and_error(message):
-    flash(message)
-    return render_template('welcome.html', club=club, competitions=competitions), 400
-
-@app.route('/displayPlaces')
-def displayPlaces():
-    # Créer un dictionnaire pour stocker le nombre de places réservées par club et par compétition
-    places_by_club_and_competition = {}
-    for club in clubs:
-        for competition in competitions:
-            if club['name'] not in places_by_club_and_competition:
-                places_by_club_and_competition[club['name']] = {}
-            places_by_club_and_competition[club['name']][competition['name']] = 0
-    for club in clubs:
-        for booking_club, places in club_bookings.items():
-            if club['name'] == booking_club:
-                for competition in competitions:
-                    if competition['name'] in competition_bookings:
-                        places_by_club_and_competition[club['name']][competition['name']] = competition_bookings[competition['name']]
-                        if booking_club in places_by_club_and_competition:
-                            places_by_club_and_competition[booking_club][competition['name']] += places
-                        else:
-                            places_by_club_and_competition[booking_club][competition['name']] = places
-    return render_template('display_places.html', clubs=clubs, competitions=competitions, places_by_club_and_competition=places_by_club_and_competition)
+@app.route('/displayPlaces', methods=['GET'])
+def points_display_board():
+    return render_template('display_places.html',
+                           clubs=clubs,
+                           competitions=competitions)
 
 @app.route('/logout')
 def logout():
