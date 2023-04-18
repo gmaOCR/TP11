@@ -80,11 +80,27 @@ def purchasePlaces():
         flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
 
-    
 
-
-# TODO: Add route for points display
-
+@app.route('/displayPlaces')
+def displayPlaces():
+    # Créer un dictionnaire pour stocker le nombre de places réservées par club et par compétition
+    places_by_club_and_competition = {}
+    for club in clubs:
+        for competition in competitions:
+            if club['name'] not in places_by_club_and_competition:
+                places_by_club_and_competition[club['name']] = {}
+            places_by_club_and_competition[club['name']][competition['name']] = 0
+    for club in clubs:
+        for booking_club, places in club_bookings.items():
+            if club['name'] == booking_club:
+                for competition in competitions:
+                    if competition['name'] in competition_bookings:
+                        places_by_club_and_competition[club['name']][competition['name']] = competition_bookings[competition['name']]
+                        if booking_club in places_by_club_and_competition:
+                            places_by_club_and_competition[booking_club][competition['name']] += places
+                        else:
+                            places_by_club_and_competition[booking_club][competition['name']] = places
+    return render_template('display_places.html', clubs=clubs, competitions=competitions, places_by_club_and_competition=places_by_club_and_competition)
 
 @app.route('/logout')
 def logout():
