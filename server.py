@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from flask import Flask,render_template,request,redirect,flash,url_for, make_response
+from flask import Flask,render_template,request,redirect,flash,url_for
 
 MAX_PLACES = 12
 
