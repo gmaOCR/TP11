@@ -1,0 +1,26 @@
+<h1>Points Display Board</h1>
+<div class="display-clubs">
+    <h2>Table of clubs</h2>
+    <ul>
+        {% for club in clubs %}
+            <li>Club: {{ club.name }} - {{ club.points }} points</li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="display-competitions">
+    <h2>Table of competitions</h2>
+    <ul>
+        {% for competition in competitions %}
+            <li>
+                {% if competition.is_date_not_yet_passed %}
+                    <u><b>Future Event</b></u>
+                {% else %}
+                    <u>Event Ended</u>
+                {% endif %} :
+                {{ competition.name }}<br>
+                Date: {{ competition.date }} <br>
+                Places available: {{ competition.numberOfPlaces }}.
+            </li>
+        {% endfor %}
+    </ul>
+</div>
