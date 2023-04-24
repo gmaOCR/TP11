@@ -1,0 +1,32 @@
+1682321896833	geckodriver	INFO	Listening on 127.0.0.1:63910
+1682321899913	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "63911" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\maria\\AppData\\Local\\Temp\\rust_mozprofileBzuVdv"
+1682321976948	geckodriver	INFO	Listening on 127.0.0.1:63958
+1682321980018	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "63959" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\maria\\AppData\\Local\\Temp\\rust_mozprofileFbwLCw"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682321980261	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+1682321980265	Marionette	INFO	Listening on port 63967
+WebDriver BiDi listening on ws://127.0.0.1:63959
+Read port: 63967
+1682321980493	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\maria\\AppData\\Local\\Temp\\rust_mozprofileFbwLCw\\search.json.mozlz4", (void 0)))
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:63959/devtools/browser/abe3e0d3-9920-40be-8816-436ee97fd885
+1682321988216	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'uninitialized'.
+1682322037301	geckodriver	INFO	Listening on 127.0.0.1:64008
+1682322040375	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "64009" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\maria\\AppData\\Local\\Temp\\rust_mozprofileW7MvGg"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1682322040626	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+1682322040631	Marionette	INFO	Listening on port 64016
+WebDriver BiDi listening on ws://127.0.0.1:64009
+Read port: 64016
+1682322040821	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\maria\\AppData\\Local\\Temp\\rust_mozprofileW7MvGg\\search.json.mozlz4", (void 0)))
+[ERROR glean_core] Error setting metrics feature config: Json(Error("EOF while parsing a value", line: 1, column: 0))
+DevTools listening on ws://127.0.0.1:64009/devtools/browser/1d4ed01a-261b-47eb-9011-6be1e6c42044
+1682322048631	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'uninitialized'.
+1682322180373	geckodriver	INFO	Listening on 127.0.0.1:64067
+1682322199370	geckodriver	INFO	Listening on 127.0.0.1:64074
