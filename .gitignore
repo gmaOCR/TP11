@@ -13,3 +13,4 @@ tests/unit/test_12_places_max.py
 tests/unit/test_booking_past_competition.py
 tests/unit/test_points_counting.py
 .gitignore
+tests/unit/test_comp_places.py
