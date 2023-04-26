@@ -17,14 +17,11 @@ def test_should_not_allow_insufficient_points(client, mock_competitions, mock_cl
         
 def test_subtract_positive_value(client, mock_clubs, mock_competitions):
     """Test la soustraction de point d'un club"""
-    with app.app_context():
-        placesRequired = 10
-        expected_points = 3
-        competitions = mock_competitions
-        club = mock_clubs
-        client.post('/purchasePlaces', data={
-            'competition': competitions[3]['name'],
-            'club': club[3]['name'],
-            'places': placesRequired
-        })
-        assert club[3]['points'] == expected_points 
+    placesRequired = 5
+    expected_points = 8
+    client.post('/purchasePlaces', data={
+        'competition': mock_competitions[3]['name'],
+        'club': mock_clubs[3]['name'],
+        'places': placesRequired
+    })
+    assert int(mock_clubs[3]['points']) == expected_points
