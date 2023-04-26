@@ -2,8 +2,10 @@ bin
 include
 lib
 .Python
-tests/
 .envrc
 __pycache__
 .flake8
 .vscode/settings.json
+tests/functionnal/tempCodeRunnerFile.py
+.gitignore
+tests/perf/tempCodeRunnerFile.py
