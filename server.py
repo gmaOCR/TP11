@@ -36,7 +36,7 @@ def showSummary():
     email = request.form['email']
     club = next((club for club in clubs if club['email'] == email), None)
     if club is None:
-        return "Club not found", 404
+        return "Club not found", 302
     return render_template('welcome.html',club=club,competitions=competitions)
 
 
