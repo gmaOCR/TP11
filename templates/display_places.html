@@ -12,11 +12,7 @@
     <ul>
         {% for competition in competitions %}
             <li>
-                {% if competition.is_date_not_yet_passed %}
-                    <u><b>Future Event</b></u>
-                {% else %}
-                    <u>Event Ended</u>
-                {% endif %} :
+                <u>Event: </u>
                 {{ competition.name }}<br>
                 Date: {{ competition.date }} <br>
                 Places available: {{ competition.numberOfPlaces }}.

@@ -120,8 +120,8 @@ def purchasePlaces():
 @app.route('/displayPlaces', methods=['GET'])
 def points_display_board():
     return render_template('display_places.html',
-                        clubs=clubs,
-                        competitions=competitions)
+                           clubs=clubs,
+                           competitions=competitions)
 
 
 @app.route('/logout')
