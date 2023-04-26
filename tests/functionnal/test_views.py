@@ -16,7 +16,8 @@ class TestApp(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_show_summary(self):
-        response = self.client.post('/showSummary', data=dict(email=clubs[0]['email']))
+        response = self.client.post(
+            '/showSummary', data=dict(email=clubs[0]['email']))
         self.assertEqual(response.status_code, 200)
         self.assert_template_used('welcome.html')
 
@@ -25,7 +26,9 @@ class TestApp(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_purchase_places(self):
-        data = dict(competition=competitions[0]['name'], club=clubs[0]['name'], places='5')
+        data = dict(
+            competition=competitions[0]['name'], club=clubs[0]['name'],
+            places='5')
         response = self.client.post('/purchasePlaces', data=data)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Great-booking complete!', response.data)
