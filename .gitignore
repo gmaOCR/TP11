@@ -5,3 +5,6 @@ lib
 tests/
 .envrc
 __pycache__
+.vscode/settings.json
+.flake8
+.gitignore
