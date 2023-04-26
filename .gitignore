@@ -2,6 +2,11 @@ bin
 include
 lib
 .Python
-tests/
 .envrc
 __pycache__
+tests/functionnal/__init__.py
+tests/functionnal/tempCodeRunnerFile.py
+tests/functionnal/test_views.py
+tests/perf/locustfile.py
+tests/perf/tempCodeRunnerFile.py
+.gitignore
